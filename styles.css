@@ -419,5 +419,10 @@ footer {
 .link1 {
   text-decoration: none;
   color: tan;
-  
+  transition: transform 0.2s ease-in-out 0.1s;
+  display:inline-block;
+}
+
+.link1:hover {
+  transform: scale(1.1);
 }
