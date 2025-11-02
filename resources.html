@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Social Spot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=League+Spartan:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="navbar">
+      <a href="index.html" class="logo">The Social Spot</a>
+      <nav class="nav-links">
+        <a href="index.html">🏠 Home</a>
+        <a href="resources.html">🔍 Resources</a>
+        <a href="add_resources.html">➕ Add Resource</a>
+        <a href="about.html">ℹ️ About</a>
+      </nav>
+    </header>
+    <!--<img src="./images/office_set [Converted]-01.svg" alt="Left decoration" class="side-image left" />
+    <img src="./images/rightimg.svg" alt="Right decoration" class="side-image right" /> --> <!--Do we want this?-->
+    <div class="page-container">
+      <main class="resourcs">
+        <div class="resource-box">
+          <h2>Resources Page</h2>
+          <p>Search or filter the resources below:</p><!--filter thing (thanks shreyas)-->
+          <form id="filter-form">
+            <div class="search-container">
+              <span class="search-icon material-symbols-outlined">search</span>
+              <input
+                type="search"
+                id="search-input"
+                placeholder="Search events..."
+              />
+              <select id="category-select">
+                <option value="all">All Categories</option>
+                <option value="meetup">Community Meetups</option>
+                <option value="workshop">Workshops</option>
+                <option value="volunteer">Volunteering Events</option>
+                <option value="networking">Networking Sessions</option>
+                <option value="virtual">Virtual / Online Events</option>
+                <option value="festival">Festivals & Celebrations</option>
+              </select>
+            </div>
+          </form>
+
+          <ul id="resource-list">
+            <!-- Example items -->
+            <li data-category="volunteer">
+              <h3>Volunteering at a Homeless Shelter</h3>
+              <p>
+                <b>Description:</b> Help provide meals, clothing, and support to
+                individuals in need at your local shelter.
+              </p>
+              <p>
+                <b>Link:</b>
+                <a href="https://familyhavenforsyth.org/" target="_blank"
+                  >Family Haven Forsyth</a
+                >
+              </p>
+              <p><b>Date & Time:</b> March 10, 2025 – 9:00 AM</p>
+              <p><b>Place:</b> Family Haven Center, Cumming, GA</p>
+            </li>
+
+            <li data-category="meetup">
+              <h3>Community Game Night</h3>
+              <p>
+                <b>Description:</b> Join us for a fun night of board games,
+                snacks, and meeting new friends!
+              </p>
+              <p>
+                <b>Link:</b>
+                <a
+                  href="https://www.meetup.com/community-gamenight"
+                  target="_blank"
+                  >Community Game Night</a
+                >
+              </p>
+              <p><b>Date & Time:</b> April 5, 2025 – 6:30 PM</p>
+              <p><b>Place:</b> Forsyth Community Center, Main Hall</p>
+            </li>
+
+            <li data-category="workshop">
+              <h3>Photography Basics Workshop</h3>
+              <p>
+                <b>Description:</b> Learn the fundamentals of photography from a
+                local professional — open to all skill levels!
+              </p>
+              <p>
+                <b>Link:</b>
+                <a
+                  href="https://www.creativecamera.org/workshops"
+                  target="_blank"
+                  >Creative Camera Workshops</a
+                >
+              </p>
+              <p><b>Date & Time:</b> May 2, 2025 – 1:00 PM</p>
+              <p><b>Place:</b> Creative Arts Studio, Downtown Atlanta</p>
+            </li>
+
+            <li data-category="networking">
+              <h3>Tech & Innovation Networking Night</h3>
+              <p>
+                <b>Description:</b> Connect with fellow students, local
+                entrepreneurs, and tech enthusiasts in your area.
+              </p>
+              <p>
+                <b>Link:</b>
+                <a href="https://www.techconnectatl.com/" target="_blank"
+                  >TechConnect ATL</a
+                >
+              </p>
+              <p><b>Date & Time:</b> June 18, 2025 – 7:00 PM</p>
+              <p><b>Place:</b> The Exchange @ Georgia Tech</p>
+            </li>
+
+            <li data-category="virtual">
+              <h3>Online Coding Jam Session</h3>
+              <p>
+                <b>Description:</b> A virtual event where participants
+                collaborate to build small coding projects live on Zoom.
+              </p>
+              <p>
+                <b>Link:</b>
+                <a href="https://zoom.us/" target="_blank">Join via Zoom</a>
+              </p>
+              <p><b>Date & Time:</b> July 15, 2025 – 4:00 PM</p>
+              <p><b>Place:</b> Online (Zoom Meeting)</p>
+            </li>
+
+            <li data-category="festival">
+              <h3>Summer Community Festival</h3>
+              <p>
+                <b>Description:</b> Celebrate summer with live music, food
+                trucks, games, and local vendors.
+              </p>
+              <p>
+                <b>Link:</b>
+                <a href="https://www.cityofforsythfestival.com/" target="_blank"
+                  >Forsyth Festival</a
+                >
+              </p>
+              <p><b>Date & Time:</b> August 10, 2025 – 11:00 AM</p>
+              <p><b>Place:</b> City Park, Forsyth, GA</p>
+            </li>
+            <!-- Add more <li> items as needed -->
+          </ul>
+
+          <div id="pagination" class="pagination"></div>
+        </div>
+      </main>
+    </div>
+
+    <footer>
+      <p>© 2025 The Social Spot | All rights reserved</p>
+      <p>Admins! Click <a href="login.html" class="link1">here</a></p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

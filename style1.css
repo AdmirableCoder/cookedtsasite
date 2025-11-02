@@ -1,0 +1,62 @@
+body {
+  font-family: "League Spartan", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-image: url("./images/210421112606-20210421-socializing-office-gfx.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
+  margin: 0;
+  text-align: center;
+}
+
+.hidden {
+  display: none;
+}
+.resource-card {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 6px;
+}
+button {
+  margin-right: 5px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 6px 12px;
+}
+
+button:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+.login-box {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  margin: 5% auto;
+  text-align: center;
+
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.admin-panel {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  max-width: 800px;
+  margin: 5% auto;
+  text-align: center;
+
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}

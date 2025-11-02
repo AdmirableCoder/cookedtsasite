@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>The Social Spot - Admin Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=League+Spartan:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+    />
+  <link rel="stylesheet" href="style1.css" />
+</head>
+<body>
+
+  <div class="login-box" id="login-form">
+  <h1>Admin Login</h1>
+  <label>Username: <input type="text" id="username" /></label><br/><br/>
+  <label>Password: <input type="password" id="password" /></label><br/><br/>
+  <button id="login-btn">Login</button>
+  <p id="login-error" style="color:red;"></p>
+  </div>
+
+
+  <div id="admin-panel" class="admin-panel hidden">
+    <h2>Pending Resources</h2>
+    <div id="pending-list"><p>No pending resources.</p></div>
+
+    <h2>Approved Resources</h2>
+    <div id="approved-list"><p>No approved resources.</p></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

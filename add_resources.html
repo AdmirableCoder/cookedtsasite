@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=League+Spartan:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=search"
+    />
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Social Spot - Add a Resource</title>
+
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <header class="navbar">
+      <a href="index.html" class="logo">The Social Spot</a>
+      <nav class="nav-links">
+        <a href="index.html">🏠 Home</a>
+        <a href="resources.html">🔍 Resources</a>
+        <a href="add_resources.html">➕ Add Event</a>
+        <a href="about.html">ℹ️ About</a>
+      </nav>
+    </header>
+
+    <main class="add-event-card">
+      <h1 class="add-event-title">Submit a New Social Event</h1>
+
+      <form id="add-event-form" autocomplete="on" novalidate>
+        <div class="add-event-form-group">
+          <label class="add-event-label" for="event-name">Event Name</label>
+          <input
+            class="add-event-input"
+            id="event-name"
+            type="text"
+            placeholder="e.g. Community Game Night"
+            required
+            maxlength="120"
+          />
+        </div>
+
+        <div class="add-event-form-group">
+          <label class="add-event-label" for="event-desc">Description</label>
+          <textarea
+            class="add-event-textarea"
+            id="event-desc"
+            placeholder="Short description..."
+            required
+            maxlength="2000"
+          ></textarea>
+        </div>
+
+        <div class="add-event-form-group">
+          <label class="add-event-label" for="event-category">Category</label>
+          <select class="add-event-select" id="event-category" required>
+            <option value="meetup">Community Meetup</option>
+            <option value="workshop">Workshop</option>
+            <option value="volunteer">Volunteering Event</option>
+            <option value="networking">Networking Session</option>
+            <option value="virtual">Virtual / Online Event</option>
+            <option value="festival">Festival or Celebration</option>
+          </select>
+        </div>
+
+        <div class="add-event-form-group">
+          <label class="add-event-label" for="event-url">Event Link</label>
+          <input
+            class="add-event-input"
+            id="event-url"
+            type="url"
+            placeholder="https://example.com"
+            required
+          />
+        </div>
+
+        <div class="add-event-form-group">
+          <label class="add-event-label" for="event-date">Date & Time</label>
+          <input
+            class="add-event-input"
+            id="event-date"
+            type="datetime-local"
+            required
+          />
+        </div>
+
+        <div class="add-event-form-group">
+          <label class="add-event-label" for="event-place">Place</label>
+          <input
+            class="add-event-input"
+            id="event-place"
+            type="text"
+            placeholder="e.g. Online (Zoom) or Community Center"
+            required
+            maxlength="120"
+          />
+        </div>
+
+        <div style="margin-top: 15px">
+          <button type="submit" class="add-event-btn add-event-submit">
+            Submit
+          </button>
+          <button
+            type="reset"
+            class="add-event-btn add-event-reset"
+            style="margin-left: 8px"
+          >
+            Reset
+          </button>
+        </div>
+
+        <p class="add-event-message" id="submission-message"></p>
+      </form>
+    </main>
+
+    <footer>
+      <p>© 2025 The Social Spot | All rights reserved</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
