@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
   /* -----------------------------
       FILTER & SEARCH (resources.html)
     ----------------------------- */
-  // Element references used by the unified filtering + pagination logic below
   const searchInput = document.getElementById("search-input");
   const categorySelect = document.getElementById("category-select");
   const resourceList = document.getElementById("resource-list");
@@ -149,7 +148,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const list = document.getElementById("resource-list");
   const pagination = document.getElementById("pagination");
 
-  // Only run pagination/filtering if the required elements exist on the page
   if (list && pagination) {
     const items = Array.from(list.querySelectorAll("li"));
 
@@ -157,7 +155,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentPage = 1;
     let filteredItems = [...items];
 
-    // Render page items
     function renderPage(page = 1) {
       list.innerHTML = "";
       const start = (page - 1) * itemsPerPage;
@@ -168,7 +165,6 @@ document.addEventListener("DOMContentLoaded", () => {
       renderPagination();
     }
 
-    // Render pagination buttons
     function renderPagination() {
       pagination.innerHTML = "";
       const pageCount = Math.ceil(filteredItems.length / itemsPerPage);
@@ -184,11 +180,9 @@ document.addEventListener("DOMContentLoaded", () => {
         pagination.appendChild(btn);
       }
     }
-
-    // Filter items based on search & category
     function filterItems() {
       const search = (searchInput?.value || "").toLowerCase();
-      const category = (categorySelect?.value) || "all";
+      const category = categorySelect?.value || "all";
 
       filteredItems = items.filter((item) => {
         const matchesCategory =
@@ -201,11 +195,9 @@ document.addEventListener("DOMContentLoaded", () => {
       renderPage(currentPage);
     }
 
-    // Event listeners (only if inputs exist)
     if (searchInput) searchInput.addEventListener("input", filterItems);
     if (categorySelect) categorySelect.addEventListener("change", filterItems);
 
-    // Initial render
     renderPage();
   }
 
