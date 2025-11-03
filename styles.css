@@ -8,6 +8,16 @@ body {
   background-attachment: fixed;
 }
 
+body.new-bg {
+  margin: 0;
+  font-family: "League Spartan", sans-serif;
+  color: rgb(0, 0, 0);
+  background-image: url("./images/leone-venter-VieM9BdZKFo-unsplash.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
 .navbar {
   background-color: #000;
   color: white;
@@ -92,19 +102,19 @@ body {
 }
 
 footer {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;       
+  padding: 12px 20px;
+  margin: 10px;
+  border-radius: 15px;
   background-color: #000;
-  align-items: center;
-  text-align: center;
   color: white;
   font-family: "League Spartan", sans-serif;
-  border-radius: 15;
-  padding-top: 40px;
-  padding-bottom: 40px;
-  padding-left: 20px;
-  padding-right: 20px;
-  margin: 10px;
-  border-radius: 20px;
 }
+
+
+
 
 .search {
   --padding: 14px;
@@ -416,16 +426,56 @@ footer {
 }
 
 #dynamic-word {
-  color: #18b43c;
-  font-weight: 700;
-  border-right: 2px solid #18b43c; /*this is the cursor btw*/
-  padding-right: 2px;
-  white-space: nowrap;
-  overflow: hidden;
+  font-size: 4em;
+  font-weight: bold;
+  color: black;
+  padding-right: 1%;
+  border-right: 3px solid #000000;
 } 
 
-.coolthing {
-  text-align: center;
+.hero-txt {
+  padding: 30px 40px;
+  border-radius: 15px;
+  backdrop-filter: blur(4px);
+  display: block;          
+  width: fit-content;     
+  white-space: nowrap;
+}
+
+.link2 {
+  text-decoration: none;
+  color: tan;
+  transition: transform 0.2s ease-in-out 0.1s;
+  display:inline-block;
   font-weight: bold;
-  
+}
+
+.brody {
+  padding: 30px 40px;
+  border-radius: 15px;
+  display: block;          
+  width: fit-content;     
+  white-space: nowrap;
+  font-size: xx-large;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+main, section {
+  flex: 1;
+}
+
+.fake-copy {
+  justify-content: left;
+  align-items: center;
+}
+
+.foot {
+  justify-content: right  ;
+  align-items: center;
 }

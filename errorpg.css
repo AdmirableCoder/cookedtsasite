@@ -1,0 +1,38 @@
+.error-404-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 80vh; /* fills most of the screen */
+  padding: 40px 20px;
+}
+
+.error-title {
+  font-size: 8em;
+  font-weight: 700;
+  margin: 0;
+  color: #000;
+}
+
+.error-subtitle {
+  font-size: 2em;
+  margin: 10px 0 20px 0;
+  font-weight: 600;
+}
+
+.error-message {
+  font-size: 1.2em;
+  margin-bottom: 30px;
+  max-width: 600px;
+  line-height: 1.5;
+}
+
+.error-btn {
+  text-decoration: none;
+  background-color: #18b43c;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+}
