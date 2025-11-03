@@ -404,18 +404,6 @@ footer {
   background-color: #0056b3;
 }
 
-.hero-txt {
-  background-color: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  text-align: center;
-  padding: 2em;
-  margin: 0 10%;
-  border-radius: 12px;
-  color: black;
-
-  mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
-}
-
 .link1 {
   text-decoration: none;
   color: tan;
@@ -425,4 +413,19 @@ footer {
 
 .link1:hover {
   transform: scale(1.1);
+}
+
+#dynamic-word {
+  color: #18b43c;
+  font-weight: 700;
+  border-right: 2px solid #18b43c; /*this is the cursor btw*/
+  padding-right: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+} 
+
+.coolthing {
+  text-align: center;
+  font-weight: bold;
+  
 }
