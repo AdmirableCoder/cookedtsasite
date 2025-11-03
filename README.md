@@ -1,9 +1,7 @@
 # TSA-Website
-Update: 11/1/2025
+Update: 11/2/2025
 
-Redesigned login page for responsiveness or smth
-Redesigned add resource page to look neat
-Finished about page and homepage
-
-Goals next time:
-Tweak stuff, and in css change from px to percent for responisveness.
+Look im too tired to do about pge
+Finished homepage
+Shreyas do about page
+(made an error page for the about page for no reason whatsoever)
