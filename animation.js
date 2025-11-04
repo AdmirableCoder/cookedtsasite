@@ -1,22 +1,21 @@
 document.addEventListener("DOMContentLoaded", () => {
   const words = [
-  "connection",
-  "togetherness",
-  "volunteering",
-  "collaboration",
-  "friendship",
-  "belonging",
-  "culture",
-  "unity",
-  "gatherings",
-  "service",
-  "conversations",
-  "nature",
-  "inclusion",
-  "celebration",
-  "community building"
-];
-
+    "connection",
+    "togetherness",
+    "volunteering",
+    "collaboration",
+    "friendship",
+    "belonging",
+    "culture",
+    "unity",
+    "gatherings",
+    "service",
+    "conversations",
+    "nature",
+    "inclusion",
+    "celebration",
+    "community building",
+  ];
 
   let current = 0;
   const target = document.getElementById("dynamic-word");
