@@ -3,15 +3,45 @@ document.addEventListener("DOMContentLoaded", () => {
   const RESOURCES_KEY = "resources";
 
   /* -----------------------------
+      GLOBAL HEADER SEARCH
+  ----------------------------- */
+  const globalSearchForm = document.getElementById("global-search-form");
+  const globalSearchInput = document.getElementById("global-search-input");
+
+  if (globalSearchForm) {
+    globalSearchForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const query = globalSearchInput.value.trim();
+      if (query) {
+        window.location.href = `resources.html?search=${encodeURIComponent(
+          query
+        )}`;
+      }
+    });
+  }
+
+  /* -----------------------------
+      RESOURCES PAGE SEARCH
+  ----------------------------- */
+  const urlParams = new URLSearchParams(window.location.search);
+  const searchQuery = urlParams.get("search");
+  const resourceSearchInput = document.getElementById("search-input");
+
+  if (searchQuery && resourceSearchInput) {
+    resourceSearchInput.value = searchQuery;
+  }
+
+  /* -----------------------------
       FILTER & SEARCH (resources.html)
-    ----------------------------- */
+  ----------------------------- */
   const searchInput = document.getElementById("search-input");
   const categorySelect = document.getElementById("category-select");
   const resourceList = document.getElementById("resource-list");
+  const pagination = document.getElementById("pagination");
 
   /* -----------------------------
-      LOAD APPROVED RESOURCES ONLY
-    ----------------------------- */
+      LOAD APPROVED RESOURCES
+  ----------------------------- */
   if (resourceList) {
     const savedResources =
       JSON.parse(localStorage.getItem(RESOURCES_KEY)) || [];
@@ -19,18 +49,77 @@ document.addEventListener("DOMContentLoaded", () => {
       const li = document.createElement("li");
       li.dataset.category = res.category || "other";
       li.innerHTML = `
-          <h3>${res.name}</h3>
-          <p><b>Category:</b> ${res.category}</p>
-          <p><b>Description:</b> ${res.desc}</p>
-          <p><b>Link:</b> <a href="${res.url}" target="_blank">${res.url}</a></p>
-        `;
+        <h3>${res.name}</h3>
+        <p><b>Category:</b> ${res.category}</p>
+        <p><b>Description:</b> ${res.desc}</p>
+        <p><b>Link:</b> <a href="${res.url}" target="_blank">${res.url}</a></p>
+      `;
       resourceList.appendChild(li);
     });
   }
 
   /* -----------------------------
-      ADD NEW RESOURCE (add_resources.html)
-    ----------------------------- */
+      FILTER FUNCTION
+  ----------------------------- */
+  if (resourceList && pagination) {
+    const items = Array.from(resourceList.querySelectorAll("li"));
+    const itemsPerPage = 3;
+    let currentPage = 1;
+    let filteredItems = [...items];
+
+    function filterItems() {
+      const search = (searchInput?.value || "").toLowerCase();
+      const category = categorySelect?.value || "all";
+
+      filteredItems = items.filter((item) => {
+        const matchesCategory =
+          category === "all" || item.dataset.category === category;
+        const matchesSearch = item.textContent.toLowerCase().includes(search);
+        return matchesCategory && matchesSearch;
+      });
+
+      currentPage = 1;
+      renderPage(currentPage);
+    }
+
+    function renderPage(page = 1) {
+      resourceList.innerHTML = "";
+      const start = (page - 1) * itemsPerPage;
+      const end = start + itemsPerPage;
+      const pageItems = filteredItems.slice(start, end);
+
+      pageItems.forEach((item) => resourceList.appendChild(item));
+      renderPagination();
+    }
+
+    function renderPagination() {
+      pagination.innerHTML = "";
+      const pageCount = Math.ceil(filteredItems.length / itemsPerPage);
+
+      for (let i = 1; i <= pageCount; i++) {
+        const btn = document.createElement("button");
+        btn.textContent = i;
+        btn.classList.toggle("active", i === currentPage);
+        btn.addEventListener("click", () => {
+          currentPage = i;
+          renderPage(currentPage);
+        });
+        pagination.appendChild(btn);
+      }
+    }
+
+    if (searchInput) searchInput.addEventListener("input", filterItems);
+    if (categorySelect) categorySelect.addEventListener("change", filterItems);
+
+    // Trigger filtering if pre-filled from global search
+    if (searchQuery) filterItems();
+
+    renderPage();
+  }
+
+  /* -----------------------------
+      ADD RESOURCE (add_resources.html)
+  ----------------------------- */
   const addResourceForm = document.getElementById("add-event-form");
   const submissionMessage = document.getElementById("submission-message");
 
@@ -55,14 +144,15 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem(PENDING_KEY, JSON.stringify(pendingResources));
 
       addResourceForm.reset();
-      submissionMessage.textContent =
-        "✅ Resource submitted and sent for review!";
+      if (submissionMessage)
+        submissionMessage.textContent =
+          "✅ Resource submitted and sent for review!";
     });
   }
 
   /* -----------------------------
       ADMIN LOGIN & APPROVE/DENY/REMOVE
-    ----------------------------- */
+  ----------------------------- */
   const loginForm = document.getElementById("login-form");
   const adminPanel = document.getElementById("admin-panel");
   const loginBtn = document.getElementById("login-btn");
@@ -85,13 +175,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const div = document.createElement("div");
       div.className = "resource-card";
       div.innerHTML = `
-          <h3>${res.name}</h3>
-          <p><b>Category:</b> ${res.category}</p>
-          <p><b>Description:</b> ${res.desc}</p>
-          <p><b>Link:</b> <a href="${res.url}" target="_blank">${res.url}</a></p>
-          <button onclick="approve(${index})">Approve</button>
-          <button onclick="deny(${index})">Deny</button>
-        `;
+        <h3>${res.name}</h3>
+        <p><b>Category:</b> ${res.category}</p>
+        <p><b>Description:</b> ${res.desc}</p>
+        <p><b>Link:</b> <a href="${res.url}" target="_blank">${res.url}</a></p>
+        <button onclick="approve(${index})">Approve</button>
+        <button onclick="deny(${index})">Deny</button>
+      `;
       pendingList.appendChild(div);
     });
   }
@@ -110,12 +200,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const div = document.createElement("div");
       div.className = "resource-card";
       div.innerHTML = `
-          <h3>${res.name}</h3>
-          <p><b>Category:</b> ${res.category}</p>
-          <p><b>Description:</b> ${res.desc}</p>
-          <p><b>Link:</b> <a href="${res.url}" target="_blank">${res.url}</a></p>
-          <button onclick="removeApproved(${index})">Remove</button>
-        `;
+        <h3>${res.name}</h3>
+        <p><b>Category:</b> ${res.category}</p>
+        <p><b>Description:</b> ${res.desc}</p>
+        <p><b>Link:</b> <a href="${res.url}" target="_blank">${res.url}</a></p>
+        <button onclick="removeApproved(${index})">Remove</button>
+      `;
       approvedList.appendChild(div);
     });
   }
@@ -145,61 +235,6 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem(RESOURCES_KEY, JSON.stringify(resources));
     renderApproved();
   };
-  const list = document.getElementById("resource-list");
-  const pagination = document.getElementById("pagination");
-
-  if (list && pagination) {
-    const items = Array.from(list.querySelectorAll("li"));
-
-    const itemsPerPage = 3;
-    let currentPage = 1;
-    let filteredItems = [...items];
-
-    function renderPage(page = 1) {
-      list.innerHTML = "";
-      const start = (page - 1) * itemsPerPage;
-      const end = start + itemsPerPage;
-      const pageItems = filteredItems.slice(start, end);
-
-      pageItems.forEach((item) => list.appendChild(item));
-      renderPagination();
-    }
-
-    function renderPagination() {
-      pagination.innerHTML = "";
-      const pageCount = Math.ceil(filteredItems.length / itemsPerPage);
-
-      for (let i = 1; i <= pageCount; i++) {
-        const btn = document.createElement("button");
-        btn.textContent = i;
-        btn.classList.toggle("active", i === currentPage);
-        btn.addEventListener("click", () => {
-          currentPage = i;
-          renderPage(currentPage);
-        });
-        pagination.appendChild(btn);
-      }
-    }
-    function filterItems() {
-      const search = (searchInput?.value || "").toLowerCase();
-      const category = categorySelect?.value || "all";
-
-      filteredItems = items.filter((item) => {
-        const matchesCategory =
-          category === "all" || item.dataset.category === category;
-        const matchesSearch = item.textContent.toLowerCase().includes(search);
-        return matchesCategory && matchesSearch;
-      });
-
-      currentPage = 1;
-      renderPage(currentPage);
-    }
-
-    if (searchInput) searchInput.addEventListener("input", filterItems);
-    if (categorySelect) categorySelect.addEventListener("change", filterItems);
-
-    renderPage();
-  }
 
   if (loginBtn) {
     loginBtn.addEventListener("click", () => {
@@ -212,7 +247,8 @@ document.addEventListener("DOMContentLoaded", () => {
         renderPending();
         renderApproved();
       } else {
-        loginError.textContent = "Incorrect username or password.";
+        if (loginError)
+          loginError.textContent = "Incorrect username or password.";
       }
     });
   }
