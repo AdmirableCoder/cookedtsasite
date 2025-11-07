@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const PENDING_KEY = "pendingResources";
   const RESOURCES_KEY = "resources";
 
-  
   /* -----------------------------
       GLOBAL HEADER SEARCH
   ----------------------------- */
@@ -22,30 +21,28 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* -----------------------------
-      RESOURCES PAGE SEARCH
+      RESOURCES PAGE SEARCH (URL param)
   ----------------------------- */
   const urlParams = new URLSearchParams(window.location.search);
   const searchQuery = urlParams.get("search");
   const resourceSearchInput = document.getElementById("search-input");
-
   if (searchQuery && resourceSearchInput) {
     resourceSearchInput.value = searchQuery;
   }
 
   /* -----------------------------
-      FILTER & SEARCH (resources.html)
+      FILTER & PAGINATION (resources.html)
   ----------------------------- */
   const searchInput = document.getElementById("search-input");
   const categorySelect = document.getElementById("category-select");
   const resourceList = document.getElementById("resource-list");
   const pagination = document.getElementById("pagination");
 
-  /* -----------------------------
-      LOAD APPROVED RESOURCES
-  ----------------------------- */
   if (resourceList) {
+    // Load approved resources from localStorage
     const savedResources =
       JSON.parse(localStorage.getItem(RESOURCES_KEY)) || [];
+
     savedResources.forEach((res) => {
       const li = document.createElement("li");
       li.dataset.category = res.category || "other";
@@ -59,9 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* -----------------------------
-      FILTER FUNCTION
-  ----------------------------- */
+  // Filtering + pagination logic
   if (resourceList && pagination) {
     const items = Array.from(resourceList.querySelectorAll("li"));
     const itemsPerPage = 3;
@@ -88,7 +83,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const start = (page - 1) * itemsPerPage;
       const end = start + itemsPerPage;
       const pageItems = filteredItems.slice(start, end);
-
       pageItems.forEach((item) => resourceList.appendChild(item));
       renderPagination();
     }
@@ -96,7 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
     function renderPagination() {
       pagination.innerHTML = "";
       const pageCount = Math.ceil(filteredItems.length / itemsPerPage);
-
       for (let i = 1; i <= pageCount; i++) {
         const btn = document.createElement("button");
         btn.textContent = i;
@@ -112,9 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (searchInput) searchInput.addEventListener("input", filterItems);
     if (categorySelect) categorySelect.addEventListener("change", filterItems);
 
-    // Trigger filtering if pre-filled from global search
-    if (searchQuery) filterItems();
-
+    if (searchQuery) filterItems(); // auto-filter if URL search
     renderPage();
   }
 
@@ -152,7 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* -----------------------------
-      ADMIN LOGIN & APPROVE/DENY/REMOVE
+      ADMIN LOGIN & APPROVAL
   ----------------------------- */
   const loginForm = document.getElementById("login-form");
   const adminPanel = document.getElementById("admin-panel");
@@ -253,4 +244,62 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  /* -----------------------------
+      HOMEPAGE HIGHLIGHT SECTION
+  ----------------------------- */
+  /* -----------------------------
+    HOMEPAGE HIGHLIGHT SECTION
+----------------------------- */
+const highlightSection = document.querySelector(".highlight_sec");
+
+if (highlightSection) {
+  const localResources = JSON.parse(localStorage.getItem(RESOURCES_KEY)) || [];
+
+  function renderHighlights(resources) {
+    // Clear section and add title + container
+    highlightSection.innerHTML = `
+      <h2 class="highlight-title">Top Community Highlights</h2>
+      <div class="highlight-grid"></div>
+    `;
+    const grid = highlightSection.querySelector(".highlight-grid");
+
+    resources.forEach((res) => {
+      const div = document.createElement("div");
+      div.className = "highlight-card";
+      div.innerHTML = `
+        <h3>${res.name}</h3>
+        <p>${res.desc}</p>
+        <a href="resources.html" target="_blank" class="linkh">Take a look →</a>
+      `;
+      grid.appendChild(div);
+    });
+  }
+
+  if (localResources.length > 0) {
+    const topThree = localResources.slice(0, 3);
+    renderHighlights(topThree);
+  } else {
+    // fallback: load static resources
+    fetch("resources.html")
+      .then((res) => res.text())
+      .then((html) => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, "text/html");
+        const items = doc.querySelectorAll("#resource-list li");
+        const topThree = Array.from(items)
+          .slice(0, 3)
+          .map((li) => ({
+            name: li.querySelector("h3")?.textContent || "Untitled",
+            desc:
+              li.querySelector("p:nth-of-type(1)")?.textContent
+                .replace("Description:", "")
+                .trim() || "",
+            url: li.querySelector("a")?.href || "#",
+          }));
+        renderHighlights(topThree);
+      })
+      .catch((err) => console.error("Highlight fetch error:", err));
+  }
+}
 });

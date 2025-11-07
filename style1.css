@@ -47,7 +47,7 @@ button:hover {
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
-
+  
 .admin-panel {
   background: rgba(255, 255, 255, 0.15);
   padding: 2rem;

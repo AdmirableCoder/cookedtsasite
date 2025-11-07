@@ -19,13 +19,14 @@ body.new-bg {
 }
 
 .navbar {
-  background-color: #000;
+  background-color: rgba(0, 0, 0, 0.9);
   color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1% 5%;
   gap: 1%;
+  
 }
 
 .logo {
@@ -103,23 +104,40 @@ body.new-bg {
 
 footer {
   display: flex;
-  justify-content: space-between; 
-  align-items: center;       
-  padding: 1% 1.8%;
-  margin: 1%;
-  border-radius: 15px;
-  background-color: #000;
-  color: white;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: #fff;
   font-family: "League Spartan", sans-serif;
+  border-radius: 0; /* removes rounded edges */
+  width: 100%;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+  gap: 10px;
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.3);
+}
+
+footer a {
+  color: tan;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease-in-out;
+}
+
+footer a:hover {
+  color: #d2b48c;
+}
+
+footer p {
+  margin: 0;
+  font-size: 0.95rem;
 }
 
 .img_2 {
   width: 200px;
   height: 200px;
 }
-
-
-
 
 .search {
   --padding: 14px;
@@ -514,5 +532,74 @@ body.about-page {
 .img_2 {
   display: flex;
   margin-left: 75%;
-  margin-bottom: 20%;
+}
+
+.highlight_sec {
+  background: transparent;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  max-width: 800px;
+  margin: 5% auto;
+  display: flex;
+  flex-direction: column;   /* stack title + grid vertically */
+  align-items: center;      /* center horizontally */
+  gap: 20px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.highlight-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;  /* center cards horizontally */
+  gap: 20px;
+  width: 100%;
+}
+
+.highlight-card {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 1.2rem;
+  flex: 1 1 250px;
+  max-width: 280px;
+  color: #222;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: left;
+}
+
+.highlight-card h3 {
+  color: #111;
+}
+
+.highlight-card p {
+  color: #333;
+}
+
+.highlight_sec a {
+  text-decoration: none;
+}
+
+.highlight_sec a:visited {
+  color: tan;
+}
+
+.linkh {
+  color: tan;
+  font-weight: 600;
+  display: inline-block;
+  transition: transform 0.2s ease-in-out 0.1s, color 0.2s;
+}
+
+.linkh:hover {
+  transform: scale(1.1);
+  color: #d2b48c;
+}
+
+.about_title {
+  text-align: left;
+  margin-left: 2%;
+  margin-bottom: 3%;
 }
