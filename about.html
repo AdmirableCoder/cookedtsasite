@@ -1,25 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Social Spot</title>
+    <title>The Social Spot - About</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=League+Spartan:wght@100..900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=League+Spartan:wght@100..900&display=swap"
       rel="stylesheet"
     />
 
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=search"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
     />
+
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+  <script src="script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <script src="scrollGradient.js"></script>
+
+  <body class="about-page">
     <header class="navbar">
       <a href="index.html" class="logo">The Social Spot</a>
+
+      <form id="global-search-form">
+        <div class="search">
+          <span class="search-icon material-symbols-outlined"> search </span>
+          <input
+            class="search-input"
+            type="search"
+            id="global-search-input"
+            placeholder="Search for an event..."
+          />
+        </div>
+      </form>
+
       <nav class="nav-links">
         <a href="index.html">🏠 Home</a>
         <a href="resources.html">🔍 Resources</a>
@@ -27,48 +46,27 @@
         <a href="about.html">ℹ️ About</a>
       </nav>
     </header>
-
-    <div class="resource-box">
-      <section class="about-section">
-      <h1>About The Social Spot</h1>
-      <p>
-        Welcome to <strong>The Social Spot</strong> — a community hub designed to
-        connect people, share ideas, and make resources more accessible.
-      </p>
-
-      <p>
-        Our mission is to bring people together through shared knowledge and
-        collaboration. Whether you’re looking for helpful tools, posting your
-        own resources, or discovering new opportunities — this is your space to
-        grow and connect.
-       </p>
-
-      <h2>Our Story</h2>
-      <p>
-        The Social Spot was created by a team of students passionate about
-        community and information-sharing. What started as a small project has
-        grown into a platform that helps people find what they need while
-        supporting each other.
-      </p>
-
-      <h2>Get Involved</h2>
-      <p>
-        Have something valuable to share? Visit our
-        <a href="add_resources.html">Add Resource</a> page and help our
-        community grow!
-      </p>
-    </section>
+    <div class="about-body">
+      <h1 class="about_title">
+        About - <span class="gradient-text">The Social Spot</span>
+      </h1>
+      <p class="about-text">
+        Welcome to <strong>The Social Spot</strong> — a community hub designed
+        to connect people, share events, and make resources more accessible. The
+        Social Spot was created by a team of students passionate about community
+        and information-sharing. Our mission is to bring people together through
+        shared knowledge and collaboration. Whether you’re looking for helpful
+        tools, posting your own resources, or discovering new opportunities —
+        this is your space to grow and connect.
+      </p> 
+        <img src="./images/Heart_corazón.svg.webp" class="img_2">
     </div>
-
-  <footer>
-      <p class="fake-copy">© 2025 The Social Spot | All rights reserved</p>
-      <p class="foot">
+    <footer>
+      <p>© 2025 The Social Spot | All rights reserved</p>
+      <p>
         Admins! Click
         <a href="login.html" target="_blank" class="link1">here</a>
       </p>
     </footer>
   </body>
-  <script type="module" src="firebase.js"></script>
-  <script type="module" src="script.js"></script>
 </html>
-
