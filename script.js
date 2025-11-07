@@ -1,65 +1,65 @@
-/* script.js */
-import { db, resourcesCollection } from "./firebase.js";
-import { getDocs, addDoc, query, where } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+// script.js
+import { db } from "./firebase.js";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  updateDoc,
+  deleteDoc,
+  doc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const usernameInput = document.getElementById("username");
-const passwordInput = document.getElementById("password");
-const loginBtn = document.getElementById("login-btn");
-const loginError = document.getElementById("login-error");
-const adminPanel = document.getElementById("admin-panel");
-const pendingList = document.getElementById("pending-list");
-const approvedList = document.getElementById("approved-list");
+const resourcesDiv = document.getElementById("resources");
+const addResourceForm = document.getElementById("addResourceForm");
+const isAdmin = localStorage.getItem("isAdmin") === "true";
 
-// Simple hardcoded admin login
-loginBtn.addEventListener("click", () => {
-const username = usernameInput.value.trim();
-const password = passwordInput.value.trim();
-
-if (username === "admin" && password === "password") {
-    document.getElementById("login-form").classList.add("hidden");
-    adminPanel.classList.remove("hidden");
-    loadResources();
-} else {
-    loginError.textContent = "Invalid username or password";
-}
-
-});
-
-// Load resources from Firestore
 async function loadResources() {
-approvedList.innerHTML = "";
-pendingList.innerHTML = "";
+  const snapshot = await getDocs(collection(db, "resources"));
+  resourcesDiv.innerHTML = "";
 
-const q = query(resourcesCollection);
-const snapshot = await getDocs(q);
-
-snapshot.forEach(doc => {
-    const data = doc.data();
-    const resourceHTML = `
-        <div class="resource">
-            <p><strong>${data.title}</strong></p>
-            <p>Category: ${data.category}</p>
-            <p>Description: ${data.description}</p>
-            <p>Link: <a href="${data.link}" target="_blank">${data.link}</a></p>
-        </div>
+  snapshot.forEach((docSnap) => {
+    const data = docSnap.data();
+    const div = document.createElement("div");
+    div.classList.add("resource-card");
+    div.innerHTML = `
+      <h3>${data.name}</h3>
+      <p>${data.description}</p>
+      <a href="${data.link}" target="_blank">Visit</a>
+      ${isAdmin && !data.approved ? `
+        <button onclick="approveResource('${docSnap.id}')">Approve</button>
+        <button onclick="denyResource('${docSnap.id}')">Deny</button>
+      ` : ""}
+      ${!data.approved && !isAdmin ? `<p><i>Pending approval</i></p>` : ""}
     `;
-    if (data.approved) {
-        approvedList.innerHTML += resourceHTML;
-    } else {
-        pendingList.innerHTML += resourceHTML;
-    }
-});
-
+    if (data.approved || isAdmin) resourcesDiv.appendChild(div);
+  });
 }
 
-// Example function to add a new resource (called from admin panel)
-export async function addResource(title, category, description, link) {
-await addDoc(resourcesCollection, {
-title,
-category,
-description,
-link,
-approved: false // admins can approve later
+window.approveResource = async function(id) {
+  await updateDoc(doc(db, "resources", id), { approved: true });
+  loadResources();
+};
+
+window.denyResource = async function(id) {
+  await deleteDoc(doc(db, "resources", id));
+  loadResources();
+};
+
+addResourceForm?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const name = document.getElementById("resourceName").value;
+  const link = document.getElementById("resourceLink").value;
+  const description = document.getElementById("resourceDescription").value;
+
+  await addDoc(collection(db, "resources"), {
+    name,
+    link,
+    description,
+    approved: false,
+  });
+
+  addResourceForm.reset();
+  alert("Resource submitted for admin approval.");
 });
-await loadResources();
-}
+
+loadResources();
