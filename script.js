@@ -1,177 +1,101 @@
-import { initializeApp } from "./firebase-app.js";
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  deleteDoc,
-  doc
-} from "./firebase-firestore.js";
+/* script.js */
 
-// Initialize Firebase (firebase.js handles your config)
-import { app, db } from "./firebase.js";
+// Admin login elements
+const loginForm = document.getElementById("login-form");
+const adminPanel = document.getElementById("admin-panel");
+const loginBtn = document.getElementById("login-btn");
+const loginError = document.getElementById("login-error");
 
-document.addEventListener("DOMContentLoaded", () => {
+// Resource form elements
+const addResBtn = document.getElementById("add-resource-btn");
+const resTitleInput = document.getElementById("res-title");
+const resCategoryInput = document.getElementById("res-category");
+const resDescInput = document.getElementById("res-desc");
+const resLinkInput = document.getElementById("res-link");
 
-  const resourceList = document.getElementById("resource-list");
+// Resource display
+const resourcesList = document.getElementById("resources-list");
 
-  // Hardcoded preloaded resources
-  const preloadedResources = [
-    { name: "Resource 1", desc: "Description 1", url: "https://example.com/1", category: "math" },
-    { name: "Resource 2", desc: "Description 2", url: "https://example.com/2", category: "science" },
-    // add more as needed
-  ];
+// Hardcoded admin credentials
+const ADMIN_USERNAME = "admin";
+const ADMIN_PASSWORD = "password";
 
-  function renderResources() {
-    if (!resourceList) return;
-    resourceList.innerHTML = "";
+// Preloaded resources (can remove if you want all dynamic)
+let resources = [
+{
+title: "Resource 1",
+category: "category1",
+description: "Description 1",
+link: "[https://example.com/1](https://example.com/1)"
+},
+{
+title: "Resource 2",
+category: "category2",
+description: "Description 2",
+link: "[https://example.com/2](https://example.com/2)"
+}
+];
 
-    // Render preloaded resources
-    preloadedResources.forEach(res => {
-      const li = document.createElement("li");
-      li.dataset.category = res.category;
-      li.innerHTML = `
-        <h3>${res.name}</h3>
-        <p><b>Category:</b> ${res.category}</p>
-        <p><b>Description:</b> ${res.desc}</p>
-        <p><b>Link:</b> <a href="${res.url}" target="_blank">${res.url}</a></p>
-      `;
-      resourceList.appendChild(li);
-    });
-  }
+// Login function
+loginBtn.addEventListener("click", () => {
+const username = document.getElementById("username").value;
+const password = document.getElementById("password").value;
 
-  renderResources();
-
-  // Add Resource Form (submits to Firestore only)
-  const addResourceForm = document.getElementById("add-event-form");
-  const submissionMessage = document.getElementById("submission-message");
-
-  if (addResourceForm) {
-    addResourceForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const name = document.getElementById("event-name").value.trim();
-      const desc = document.getElementById("event-desc").value.trim();
-      const url = document.getElementById("event-url").value.trim();
-      const category = document.getElementById("event-category").value;
-
-      if (!name || !desc || !url) {
-        alert("Please fill out all fields before submitting.");
-        return;
-      }
-
-      try {
-        await addDoc(collection(db, "pendingResources"), {
-          name,
-          desc,
-          url,
-          category,
-          timestamp: Date.now(),
-        });
-
-        addResourceForm.reset();
-        if (submissionMessage)
-          submissionMessage.textContent =
-            "✅ Resource submitted and sent for review!";
-      } catch (err) {
-        console.error("Error adding resource:", err);
-        alert("❌ Failed to submit. Please try again.");
-      }
-    });
-  }
-
-  // Admin Login
-  const loginForm = document.getElementById("login-form");
-  const adminPanel = document.getElementById("admin-panel");
-  const loginBtn = document.getElementById("login-btn");
-  const loginError = document.getElementById("login-error");
-
-  const ADMIN_USERNAME = "admin";
-  const ADMIN_PASSWORD = "password123";
-
-  async function renderPending() {
-    const pendingList = document.getElementById("pending-list");
-    pendingList.innerHTML = "";
-
-    const snapshot = await getDocs(collection(db, "pendingResources"));
-    if (snapshot.empty) {
-      pendingList.innerHTML = "<p>No pending resources.</p>";
-      return;
-    }
-
-    snapshot.forEach((docSnap) => {
-      const res = docSnap.data();
-      const div = document.createElement("div");
-      div.className = "resource-card";
-      div.innerHTML = `
-        <h3>${res.name}</h3>
-        <p><b>Category:</b> ${res.category}</p>
-        <p><b>Description:</b> ${res.desc}</p>
-        <p><b>Link:</b> <a href="${res.url}" target="_blank">${res.url}</a></p>
-        <button onclick="approve('${docSnap.id}', '${res.name}', '${res.desc}', '${res.url}', '${res.category}')">Approve</button>
-        <button onclick="deny('${docSnap.id}')">Deny</button>
-      `;
-      pendingList.appendChild(div);
-    });
-  }
-
-  async function renderApproved() {
-    const approvedList = document.getElementById("approved-list");
-    approvedList.innerHTML = "";
-
-    const snapshot = await getDocs(collection(db, "resources"));
-    if (snapshot.empty) {
-      approvedList.innerHTML = "<p>No approved resources.</p>";
-      return;
-    }
-
-    snapshot.forEach((docSnap) => {
-      const res = docSnap.data();
-      const div = document.createElement("div");
-      div.className = "resource-card";
-      div.innerHTML = `
-        <h3>${res.name}</h3>
-        <p><b>Category:</b> ${res.category}</p>
-        <p><b>Description:</b> ${res.desc}</p>
-        <p><b>Link:</b> <a href="${res.url}" target="_blank">${res.url}</a></p>
-        <button onclick="removeApproved('${docSnap.id}')">Remove</button>
-      `;
-      approvedList.appendChild(div);
-    });
-  }
-
-  window.approve = async function (id, name, desc, url, category) {
-    await addDoc(collection(db, "resources"), { name, desc, url, category });
-    await deleteDoc(doc(db, "pendingResources", id));
-    renderPending();
-    renderApproved();
-  };
-
-  window.deny = async function (id) {
-    await deleteDoc(doc(db, "pendingResources", id));
-    renderPending();
-  };
-
-  window.removeApproved = async function (id) {
-    await deleteDoc(doc(db, "resources", id));
-    renderApproved();
-  };
-
-  if (loginBtn) {
-    loginBtn.addEventListener("click", () => {
-      const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value.trim();
-
-      if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-        loginForm.classList.add("hidden");
-        adminPanel.classList.remove("hidden");
-        renderPending();
-        renderApproved();
-      } else {
-        if (loginError)
-          loginError.textContent = "Incorrect username or password.";
-      }
-    });
-  }
-
+if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+loginForm.classList.add("hidden");
+adminPanel.classList.remove("hidden");
+renderResources();
+} else {
+loginError.textContent = "Invalid username or password.";
+}
 });
+
+// Add resource
+addResBtn.addEventListener("click", () => {
+const title = resTitleInput.value;
+const category = resCategoryInput.value;
+const description = resDescInput.value;
+const link = resLinkInput.value;
+
+if (!title || !category || !description || !link) {
+alert("Please fill in all fields.");
+return;
+}
+
+const newRes = { title, category, description, link };
+resources.push(newRes);
+
+// Reset input fields
+resTitleInput.value = "";
+resCategoryInput.value = "";
+resDescInput.value = "";
+resLinkInput.value = "";
+
+renderResources();
+});
+
+// Render resources to page
+function renderResources() {
+resourcesList.innerHTML = "";
+
+if (resources.length === 0) {
+resourcesList.innerHTML = "<p>No resources yet.</p>";
+return;
+}
+
+resources.forEach((res, index) => {
+const div = document.createElement("div");
+div.innerHTML = `       <h3>${res.title}</h3>       <p><strong>Category:</strong> ${res.category}</p>       <p><strong>Description:</strong> ${res.description}</p>       <p><strong>Link:</strong> <a href="${res.link}" target="_blank">${res.link}</a></p>       <button onclick="removeResource(${index})">Remove</button>       <hr>
+    `;
+resourcesList.appendChild(div);
+});
+}
+
+// Remove a resource
+function removeResource(index) {
+resources.splice(index, 1);
+renderResources();
+}
+
+// Initial render
+renderResources();
