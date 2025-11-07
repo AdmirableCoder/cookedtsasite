@@ -1,101 +1,65 @@
 /* script.js */
+import { db, resourcesCollection } from "./firebase.js";
+import { getDocs, addDoc, query, where } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-// Admin login elements
-const loginForm = document.getElementById("login-form");
-const adminPanel = document.getElementById("admin-panel");
+const usernameInput = document.getElementById("username");
+const passwordInput = document.getElementById("password");
 const loginBtn = document.getElementById("login-btn");
 const loginError = document.getElementById("login-error");
+const adminPanel = document.getElementById("admin-panel");
+const pendingList = document.getElementById("pending-list");
+const approvedList = document.getElementById("approved-list");
 
-// Resource form elements
-const addResBtn = document.getElementById("add-resource-btn");
-const resTitleInput = document.getElementById("res-title");
-const resCategoryInput = document.getElementById("res-category");
-const resDescInput = document.getElementById("res-desc");
-const resLinkInput = document.getElementById("res-link");
-
-// Resource display
-const resourcesList = document.getElementById("resources-list");
-
-// Hardcoded admin credentials
-const ADMIN_USERNAME = "admin";
-const ADMIN_PASSWORD = "password";
-
-// Preloaded resources (can remove if you want all dynamic)
-let resources = [
-{
-title: "Resource 1",
-category: "category1",
-description: "Description 1",
-link: "[https://example.com/1](https://example.com/1)"
-},
-{
-title: "Resource 2",
-category: "category2",
-description: "Description 2",
-link: "[https://example.com/2](https://example.com/2)"
-}
-];
-
-// Login function
+// Simple hardcoded admin login
 loginBtn.addEventListener("click", () => {
-const username = document.getElementById("username").value;
-const password = document.getElementById("password").value;
+const username = usernameInput.value.trim();
+const password = passwordInput.value.trim();
 
-if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-loginForm.classList.add("hidden");
-adminPanel.classList.remove("hidden");
-renderResources();
+if (username === "admin" && password === "password") {
+    document.getElementById("login-form").classList.add("hidden");
+    adminPanel.classList.remove("hidden");
+    loadResources();
 } else {
-loginError.textContent = "Invalid username or password.";
+    loginError.textContent = "Invalid username or password";
 }
+
 });
 
-// Add resource
-addResBtn.addEventListener("click", () => {
-const title = resTitleInput.value;
-const category = resCategoryInput.value;
-const description = resDescInput.value;
-const link = resLinkInput.value;
+// Load resources from Firestore
+async function loadResources() {
+approvedList.innerHTML = "";
+pendingList.innerHTML = "";
 
-if (!title || !category || !description || !link) {
-alert("Please fill in all fields.");
-return;
-}
+const q = query(resourcesCollection);
+const snapshot = await getDocs(q);
 
-const newRes = { title, category, description, link };
-resources.push(newRes);
-
-// Reset input fields
-resTitleInput.value = "";
-resCategoryInput.value = "";
-resDescInput.value = "";
-resLinkInput.value = "";
-
-renderResources();
-});
-
-// Render resources to page
-function renderResources() {
-resourcesList.innerHTML = "";
-
-if (resources.length === 0) {
-resourcesList.innerHTML = "<p>No resources yet.</p>";
-return;
-}
-
-resources.forEach((res, index) => {
-const div = document.createElement("div");
-div.innerHTML = `       <h3>${res.title}</h3>       <p><strong>Category:</strong> ${res.category}</p>       <p><strong>Description:</strong> ${res.description}</p>       <p><strong>Link:</strong> <a href="${res.link}" target="_blank">${res.link}</a></p>       <button onclick="removeResource(${index})">Remove</button>       <hr>
+snapshot.forEach(doc => {
+    const data = doc.data();
+    const resourceHTML = `
+        <div class="resource">
+            <p><strong>${data.title}</strong></p>
+            <p>Category: ${data.category}</p>
+            <p>Description: ${data.description}</p>
+            <p>Link: <a href="${data.link}" target="_blank">${data.link}</a></p>
+        </div>
     `;
-resourcesList.appendChild(div);
+    if (data.approved) {
+        approvedList.innerHTML += resourceHTML;
+    } else {
+        pendingList.innerHTML += resourceHTML;
+    }
 });
+
 }
 
-// Remove a resource
-function removeResource(index) {
-resources.splice(index, 1);
-renderResources();
+// Example function to add a new resource (called from admin panel)
+export async function addResource(title, category, description, link) {
+await addDoc(resourcesCollection, {
+title,
+category,
+description,
+link,
+approved: false // admins can approve later
+});
+await loadResources();
 }
-
-// Initial render
-renderResources();
