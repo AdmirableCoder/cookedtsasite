@@ -128,39 +128,6 @@
       </p>
     </footer>
 
-    <script type="module" src="firebase.js"></script>
-    <script type="module">
-      import { db } from "./firebase.js";
-      import { addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-      const form = document.getElementById("add-event-form");
-      const message = document.getElementById("submission-message");
-
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const data = {
-          name: document.getElementById("event-name").value.trim(),
-          description: document.getElementById("event-desc").value.trim(),
-          category: document.getElementById("event-category").value,
-          link: document.getElementById("event-url").value.trim(),
-          date: document.getElementById("event-date").value,
-          place: document.getElementById("event-place").value.trim(),
-          approved: false,
-          createdAt: serverTimestamp()
-        };
-
-        try {
-          await addDoc(collection(db, "resources"), data);
-          message.textContent = "✅ Event submitted for admin approval!";
-          message.style.color = "green";
-          form.reset();
-        } catch (error) {
-          console.error(error);
-          message.textContent = "❌ Error submitting event. Please try again.";
-          message.style.color = "red";
-        }
-      });
-    </script>
+    <script src="script.js"></script>
   </body>
 </html>
